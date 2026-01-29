@@ -21,6 +21,12 @@ class Cell:
     def alive(self):
         return self.color != Color.BLACK
 
+    def die(self):
+        self.color = Color.BLACK
+
+    def spawn(self):
+        self.color = Color.WHITE
+
 
 class Game:
     def __init__(self, x, y):
@@ -28,27 +34,40 @@ class Game:
         self.grid = [
                 [Cell(choice(colors)) for _ in range(x)] for _ in range(y)
             ]
-        self.update()
+        # update()
 
     def update(self):
+        kill = list()
+        spawn = list()
+
         for y, row in enumerate(self.grid):
             for x, it in enumerate(row):
                 n = self.count_cell_neighbors(x, y)
                 if (n == 2):
                     pass
                 elif (n == 3):
-                    it.color = Color.WHITE
+                    spawn.append(it)
                 else:
-                    self.cell_die(x, y)
+                    kill.append(it)
+
+        for it in kill:
+            it.die()
+
+        for it in spawn:
+            it.spawn()
 
     def count_cell_neighbors(self, x, y):
         n = 0
-        for i in range(y - 1, y + 1):
-            for j in range(x - 1, x + 1, 2 if i == y else 1):
-                if (self.grid[i][j].alive()):
+        for row in range(y - 1, y + 2):
+            for col in range(x - 1, x + 2):
+                if (row == y and col == x):
+                    continue
+
+                if (row < 0 or row >= len(self.grid)):
+                    continue
+                if (col < 0 or col >= len(self.grid[0])):
+                    continue
+
+                if (self.grid[row][col].alive()):
                     n += 1
-
         return n
-
-    def cell_die(self, x, y):
-        self.grid[y][x] = Cell(Color.BLACK)
