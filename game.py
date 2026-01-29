@@ -58,16 +58,14 @@ class Game:
 
     def count_cell_neighbors(self, x, y):
         n = 0
-        for row in range(y - 1, y + 2):
-            for col in range(x - 1, x + 2):
-                if (row == y and col == x):
-                    continue
-
-                if (row < 0 or row >= len(self.grid)):
-                    continue
-                if (col < 0 or col >= len(self.grid[0])):
-                    continue
-
+        rows = range(max(y - 1, 0), min(y + 2, len(self.grid)))
+        for row in rows:
+            cols = range(
+                    max(x - 1, 0),
+                    min(x + 2, len(self.grid[0])),
+                    2 if row == y else 1
+                    )
+            for col in cols:
                 if (self.grid[row][col].alive()):
                     n += 1
         return n
