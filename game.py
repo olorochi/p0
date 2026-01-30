@@ -1,4 +1,5 @@
 from random import choices
+from random import choice
 from enum import StrEnum
 
 
@@ -6,10 +7,10 @@ class Color(StrEnum):
     BLACK = '\033[30m'
     RED = '\033[31m'
     GREEN = '\033[32m'
-    YELLOW = '\033[33m'
+    # YELLOW = '\033[33m'
     BLUE = '\033[34m'
-    MAGENTA = '\033[35m'
-    CYAN = '\033[36m'
+    # MAGENTA = '\033[35m'
+    # CYAN = '\033[36m'
     WHITE = '\033[37m'
     # DEFAULT = '\033[0m'
 
@@ -29,16 +30,16 @@ class Cell:
 
 
 class Game:
-    def __init__(self, x, y):
+    def __init__(self, x, y, life_chance):
         colors = list(Color)
         wgts = list()
         for color in colors:
-            wgts.append(7 if color == Color.BLACK else 1)
+            wgts.append(len(colors) - 1 if color == Color.BLACK else life_chance)
 
         self.grid = [
                 [Cell(c) for c in choices(colors, wgts, k=x)] for _ in range(y)
             ]
-        self.update()
+        # self.update()
 
     def update(self):
         kill = list()
@@ -50,7 +51,8 @@ class Game:
                 if (n == 2):
                     pass
                 elif (n == 3):
-                    spawn.append(it)
+                    if (not it.alive()):
+                        spawn.append((it, color))
                 else:
                     kill.append(it)
 
@@ -58,7 +60,7 @@ class Game:
             it.die()
 
         for it in spawn:
-            it.spawn(color)
+            it[0].spawn(it[1])
 
     def query_cell_neighbors(self, x, y):
         colors = dict((c, 0) for c in list(Color))
@@ -76,6 +78,6 @@ class Game:
                 if (it.alive()):
                     colors[it.color] += 1
 
-        color = max(colors, key=colors.get)
         n = sum(colors.values())
+        color = Color.WHITE
         return color, n
