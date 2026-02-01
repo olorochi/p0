@@ -1,5 +1,4 @@
 from random import choices
-from random import choice
 from enum import StrEnum
 
 
@@ -22,45 +21,29 @@ class Cell:
     def alive(self):
         return self.color != Color.BLACK
 
-    def die(self):
-        self.color = Color.BLACK
-
-    def spawn(self, color):
-        self.color = color
-
 
 class Game:
     def __init__(self, x, y, life_chance):
         colors = list(Color)
-        wgts = list()
-        for color in colors:
-            wgts.append(len(colors) - 1 if color == Color.BLACK else life_chance)
-
-        self.grid = [
-                [Cell(c) for c in choices(colors, wgts, k=x)] for _ in range(y)
-            ]
+        wgts = [len(colors) - 1 if c == Color.BLACK else life_chance for c in colors]
+        self.grid = [[Cell(c) for c in choices(colors, wgts, k=x)] for _ in range(y)]
         # self.update()
 
     def update(self):
-        kill = list()
-        spawn = list()
+        # starting with all dead means we don't have to kill cells manually
+        grid = [[Cell(Color.BLACK) for _ in self.grid[0]] for _ in self.grid]
+        from writer import Writer
+        Writer.draw(grid)
 
         for y, row in enumerate(self.grid):
             for x, it in enumerate(row):
                 color, n = self.query_cell_neighbors(x, y)
-                if (n == 2):
-                    pass
+                if (n == 2 and it.alive()):
+                    grid[y][x] = it
                 elif (n == 3):
-                    if (not it.alive()):
-                        spawn.append((it, color))
-                else:
-                    kill.append(it)
+                    grid[y][x].color = color
 
-        for it in kill:
-            it.die()
-
-        for it in spawn:
-            it[0].spawn(it[1])
+        self.grid = grid
 
     def query_cell_neighbors(self, x, y):
         colors = dict((c, 0) for c in list(Color))
@@ -79,5 +62,5 @@ class Game:
                     colors[it.color] += 1
 
         n = sum(colors.values())
-        color = Color.WHITE
+        color = max(colors, key=colors.get)
         return color, n
