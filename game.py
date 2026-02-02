@@ -31,8 +31,6 @@ class Game:
     def update(self):
         # starting with all dead means we don't have to kill cells manually
         grid = [[Cell(Color.BLACK) for _ in self.grid[0]] for _ in self.grid]
-        from writer import Writer
-        Writer.draw(grid)
 
         for y, row in enumerate(self.grid):
             for x, it in enumerate(row):
