@@ -8,6 +8,7 @@ CHUNK_Y = 40
 CHUNK_X = 80
 LIFE_CHANCE = 0.3
 
+
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -39,6 +40,9 @@ class Chunk:
         wgts = [len(colors) - 1 if c == Color.BLACK else LIFE_CHANCE for c in colors]
         self.grid = [[Cell(c) for c in random.choices(colors, wgts, k=CHUNK_X)] for _ in range(CHUNK_Y)]
         self.__update(parent)
+
+    def __getitem__(self, pos):
+        return self.grid[pos.y][pos.x]
 
     def __update(self, parent):
         # starting with all dead means we don't have to kill cells manually
@@ -76,17 +80,22 @@ class Chunk:
         out.__update(parent)
         return out
 
+
 class Game:
     def __init__(self):
         self.pos = Point(0, 0)
         self.grid = defaultdict(lambda: Chunk(self))
+        self.update()
+
+    def __getitem__(self, pos):
+        return self.grid[pos]
 
     def update(self):
-        grid = dict()
+        grid = {}
 
         chunk = Point(self.pos.x // CHUNK_X, self.pos.y // CHUNK_Y)
-        for x in range(chunk.x - 1, chunk.x + 2):
-            for y in range(chunk.y - 1, chunk.y + 2):
-                grid[x, y] = self.grid[(x, y)].get_updated(self)
+        for y in range(chunk.y - 1, chunk.y + 2):
+            for x in range(chunk.x - 1, chunk.x + 2):
+                grid[x, y] = self.grid[x, y].get_updated(self)
 
         self.grid.update(grid)

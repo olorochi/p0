@@ -1,4 +1,5 @@
 from enum import StrEnum
+from game import CHUNK_X, CHUNK_Y, Point
 
 
 class ANSI(StrEnum):
@@ -11,10 +12,12 @@ class Writer:
     def save_pos():
         print(ANSI.SAVE_POS)
 
-    def draw(grid):
+    def draw(game):
         print(ANSI.REST_POS)
-        for row in grid:
-            for it in row:
-                print(it.color, 'X', sep='', end='')
+        for y in range(game.pos.y, game.pos.y + CHUNK_Y):
+            for x in range(game.pos.x, game.pos.x + CHUNK_X):
+                div = Point(x // CHUNK_X, y // CHUNK_Y)
+                rem = Point(x - div.x, y - div.y)
+                print(game[div.x, div.y][Point(rem.x, rem.y)].color, 'X', sep='', end='')
             print()
         print(ANSI.NO_STYLE)

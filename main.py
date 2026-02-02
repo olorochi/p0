@@ -7,9 +7,9 @@ DELAY = 0.5
 
 game = Game()
 Writer.save_pos()
-Writer.draw(game.grid)
+Writer.draw(game)
 
 while (True):
     time.sleep(DELAY)
     game.update()
-    Writer.draw(game.grid)
+    Writer.draw(game)
