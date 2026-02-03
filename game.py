@@ -87,9 +87,6 @@ class Chunk:
         out.__update(parent, offset, True)
         return out
 
-    def in_bounds(self, pos):
-        return pos.x >= 0 and pos.x < CHUNK_X and pos.y >= 0 and pos.y < CHUNK_Y
-
 
 class Game:
     def __init__(self):
