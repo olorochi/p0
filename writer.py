@@ -16,8 +16,6 @@ class Writer:
         print(ANSI.REST_POS)
         for y in range(game.pos.y, game.pos.y + CHUNK_Y):
             for x in range(game.pos.x, game.pos.x + CHUNK_X):
-                div = Point(x // CHUNK_X, y // CHUNK_Y)
-                rem = Point(x - div.x * CHUNK_X, y - div.y * CHUNK_Y)
-                print(game[div.x, div.y][rem].color, 'X', sep='', end='')
+                print(game[Point(x, y)].color, 'X', sep='', end='')
             print()
         print(ANSI.NO_STYLE)

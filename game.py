@@ -88,7 +88,9 @@ class Game:
         self.update()
 
     def __getitem__(self, pos):
-        return self.grid[pos]
+        div = Point(pos.x // CHUNK_X, pos.y // CHUNK_Y)
+        rem = Point(pos.x - div.x * CHUNK_X, pos.y - div.y * CHUNK_Y)
+        return self.grid[div.x, div.y][rem]
 
     def update(self):
         grid = {}
