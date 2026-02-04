@@ -61,6 +61,7 @@ while True:
     ev = evs.get()
     if (ev.type == EventType.INPUT):
         game.pos += ev.vec
+    else:
+        game.update()
 
-    game.update()
     Writer.draw(game)
