@@ -1,4 +1,5 @@
 import time
+import os
 from game import Game
 from writer import Writer
 
@@ -6,8 +7,8 @@ from writer import Writer
 DELAY = 0.5
 
 game = Game()
-Writer.save_pos()
 Writer.draw(game)
+os.system('cls' if os.name == 'nt' else 'clear')
 
 while (True):
     time.sleep(DELAY)
