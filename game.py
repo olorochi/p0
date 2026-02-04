@@ -13,6 +13,9 @@ class Point:
         self.x = x
         self.y = y
 
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
 
 class Color(StrEnum):
     BLACK = '\033[30m'
