@@ -30,13 +30,13 @@ class InputEvent(Event):
 def input_thr():
     while True:
         c = getch()
-        if c == 'h':
+        if c in ['h', 'a']:
             pt = Point(-1, 0)
-        elif c == 'j':
+        elif c in ['j', 's']:
             pt = Point(0, 1)
-        elif c == 'k':
+        elif c in ['k', 'w']:
             pt = Point(0, -1)
-        elif c == 'l':
+        elif c in ['l', 'd']:
             pt = Point(1, 0)
         else:
             return
